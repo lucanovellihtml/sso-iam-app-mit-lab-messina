@@ -3,16 +3,15 @@ package com.dxc.mit.iam.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/custom-login")
+// @RequestMapping("/custom-login")
 public class LoginController {
 
     @GetMapping("/messaggio-ivan")
     public String pagina(Model model) {
-        model.addAttribute("messaggio", "Ivan è gay");
+        model.addAttribute("messaggio", "Hi ivan");
         return "pagina";
     }
-	
+
 }
