@@ -23,21 +23,19 @@ public class WebContextConfiguration {
     }
 
     /*
-     * questo bena è responsabile della configurazione del file esterno per la
+     * questo bean è responsabile della configurazione del file esterno per la
      * gestione dei messaggi localizzati
      */
-    /*
-     * @Bean
-     * public ResourceBundleMessageSource messageSource() {
-     * ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-     * 
-     * // il classpath è -> src/main/resources
-     * source.setBasename("classpath:/i18n/messages");
-     * source.setCacheSeconds(0);
-     * source.setDefaultEncoding("UTF-8");
-     * source.setFallbackToSystemLocale(false);
-     * return source;
-     * }
-     */
+    @Bean
+    public ResourceBundleMessageSource messageSource() {
+        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+
+        // il classpath è -> src/main/resources
+        source.setBasename("static/i18n/messages");
+        source.setCacheSeconds(0);
+        source.setDefaultEncoding("UTF-8");
+        source.setFallbackToSystemLocale(false);
+        return source;
+    }
 
 }
