@@ -15,7 +15,7 @@ public class SsoIamAppMitApplication {
 	}
 
 	/*
-	 * questo @Bean è responsabile di caricare,solo se non esiste già
+	 * Questo @Bean è responsabile di caricare,solo se non esiste già
 	 * l'implementazione, i Tag Library Descriptors per il motore di template
 	 * Freemarker
 	 */
