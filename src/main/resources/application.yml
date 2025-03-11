@@ -1,21 +1,22 @@
-#file application preso dal jar del comune
 logging:
-  pattern: 
+  pattern:
     level: "%X{customData}%5p"
     dateformat: yyyy-MM-dd HH:mm:ss.SSS,Europe/Rome
   level:
-    org.springframework.security: DEBUG
-    com.dxc.cdm.iam: DEBUG
-    com.dxc.cdm.iam.security.preauth: INFO
-    com.dxc.cdm.iam.configuration: INFO
-    
+    org.springframework.security: ERROR
+    com.dxc.mit.iam: DEBUG
+    com.dxc.mit.iam.security.preauth: INFO
+    com.dxc.mit.iam.configuration: INFO
 management:
   endpoints:
-    enabled-by-default: true
+    enabled-by-default: false
     web:
       exposure:
-        include: '*'
-        
+        include: health
+  endpoint:
+    health:
+      enabled: true
+      show-details: NEVER
 com:
   dxc:
     cdm:
@@ -23,78 +24,30 @@ com:
         rest:
           connectionTimeout: 20000
           readTimeout: 60000
-        headerLogBlacklist: correlationId
-
+        headerLogBlacklist: null
 spring:
   application:
     name: sso-iam-app
   messages:
-    basename: static/i18n/messages
-  # Variabile per specificare a Spring Boot dove ricercare i file templates e i file freemarker e non far memorizzare le vecchie configurazioni disabilitando la cache
-  freemarker:
-    suffix: .ftl
-    template-loader-path: classpath:/templates/
-    cache: false 
-
+    basename: i18n/messages
+  # aggiornamento: modifica temporanea per definire la gestione del path nel metodo addResourceHandlers
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
 server:
-  port: 8105
-#  error:
-#    whitelabel:
-#      enabled: true
+  port: 3000
   servlet:
-    context-path: /cdmlogin
-  #use-forward-headers: true
-  
+    context-path: /customlogin
+  forward-headers-strategy: framework
 static:
   resource:
-    url: /cdmlogin
-
-spididp:
-  list:
-    - idpId: arubaid
-      name: Aruba ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://loginspid.aruba.it&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: infocertid
-      name: Infocert ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://identity.infocert.it&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: lepidaid
-      name: Lepida ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://id.lepida.it/idp/shibboleth&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: namirialid
-      name: Namirial ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://idp.namirialtsp.com/idp&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: posteid
-      name: Poste ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://posteid.poste.it&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: sielteid
-      name: Sielte ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://identity.sieltecloud.it&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: spiditalia
-      name: SpidItalia
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://spid.register.it&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: timid
-      name: Tim ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://login.id.tim.it/affwebservices/public/saml2sso&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true  
-    - idpId: teamsystemid
-      name: TeamSystem ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://spid.teamsystem.com/idp&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: etnaid
-      name: Etna ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://id.eht.eu&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: infocamereid
-      name: InfoCamere ID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://loginspid.infocamere.it&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-    - idpId: intesigroupspid
-      name: Intesi Group SPID
-      url: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spspid&idpEntityID=https://idp.intesigroup.com&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0&ForceAuthn=true
-
+    url: /customlogin
 sso:
   url:
     authenticate: http://localhost:8100/v1/sso/authenticate
     sessionInfo: http://localhost:8100/v1/sso/sessioninfo/{tokenId}
-#    customLoginResponse: http://localhost:8100/v1/sso/postlogin/{state}
     logout: http://localhost:8100/v1/sso/logout
-#    spidIdpList: http://localhost:8100/v1/sso/spid/idp
+    spidIdpList: http://localhost:8100/v1/sso/spid/idp
     findUserByCFNotTipoUtente: http://localhost:8100/v2/identita/user/find-user-by-cf-not-tipoutente/{cf}/{tipoUtente}
     userInfo: http://localhost:8100/v2/identita/user/{uid}
     resetUserIdByEmail: http://localhost:8100/v2/identita/user/reset-id-email
@@ -109,16 +62,12 @@ sso:
     ldapUserInfo: http://localhost:8100/v2/identita/ldapuser/{uid}
     ldapUserDelete: http://localhost:8100/v2/identita/ldapuser/delete/{id}/{domain}
     ldapUserUpdate: http://localhost:8100/v2/identita/ldapuser/update/{domain}
-    ldapUserAggiornamento: http://localhost:8100/v2/identita/ldapuser/updateWithBlank/{domain}
     userFieldModify: http://localhost:8100/v2/identita/user/modify-field/{domain}
     createUser: http://localhost:8100/v2/identita/user/create/{domain}
-    createCompany: http://localhost:8100/v2/identita/company/create/{domain}
     checkUser: http://localhost:8100/v2/identita/user/check/{uid}/{iamuserid}
     searchUser: http://localhost:8100/v2/identita/user/search/{uid}
     nazioneInfo: http://localhost:8100/v2/identita/nazioni/{code}
-    ldapCompanyInfo: http://localhost:8100/v2/identita/ldapcompany/{uid}
     searchCompany: http://localhost:8100/v2/identita/company/search/{uid}
-    searchCompanyAlternativa: http://localhost:8100/v2/identita/company/search/alternativa/{uid}
     searchCompanyRappLegale: http://localhost:8100/v2/identita/company/rappresentantelegale/search/{uid}
     companyFieldModify: http://localhost:8100/v2/identita/company/modify-field/{domain}
     nazioniLista: http://localhost:8100/v2/identita/nazioni/list
@@ -132,31 +81,49 @@ sso:
     emailCheck: http://localhost:8100/v2/identita/checkemail/check
     emailCheckTokenCheck: http://localhost:8100/v2/identita/checkemail/token/check/{uid}/{token}
     otpGenerateSendEmail: http://localhost:8100/v2/identita/otp/generate/sendEmail
-    otpGenerateOtpPhone: http://localhost:8100/v2/identita/otp/generate/phone/sendSms
-    otpPhoneGenerateSendEmail: http://localhost:8100/v2/identita/otp/generate/phone/sendSms
     otpCheck: http://localhost:8100/v2/identita/otp/check
     otpDelete: http://localhost:8100/v2/identita/otp/{uid}
-    resetDevice: http://localhost:8080/v2/identita/user/reset-device/{uid}
     domicilioDigitaleUrl: https://portal-coll.ecaas.comune.milano.it/fascicolo-del-cittadino/domicilio-digitale
-    entraConCIEUrl: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spcie&idpEntityID=https%3A%2F%2Fpreproduzione.idserver.servizicie.interno.gov.it%2Fidp%2Fprofile%2FSAML2%2FPOST%2FSSO&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&ForceAuthn=true&AttributeConsumingServiceIndex=0&AssertionConsumerServiceIndex=0
-    entraDipendenteUrl: https://sso.comune.milano.it/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/Servizi/spadfs&idpEntityID=http://sts-coll.comune.milano.it/adfs/services/trust&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&AttributeConsumingServiceIndex=0
-  cookieName: iPlanetDirectoryPro
+    entraConCIEUrl: ${CIE_LOGIN_URL:https://ssoop-coll.servizidt.it/idpop/saml2/jsp/spSSOInit.jsp?metaAlias=/idpopusers//spcie&idpEntityID=https%3A%2F%2Fpreproduzione.idserver.servizicie.interno.gov.it%2Fidp%2Fprofile%2FSAML2%2FPOST%2FSSO&reqBinding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST}
+    provinciaByDate: ${URL_ANAGRAFICA_ELENCO_PROVINCIA:http://apigw-gwbackend-devel.k8s01.sidt.local/anagrafica/api/v1/provincia/elenco/{dataValidita}}
+    comuneByCodProAndDate: ${URL_ANAGRAFICA_ELENCO_COMUNE:http://apigw-gwbackend-devel.k8s01.sidt.local/anagrafica/api/v1/comune/elenco/{codiceProvincia}/{dataValidita}}
+    statoByDate: ${URL_ANAGRAFICA_ELENCO_STATO:http://apigw-gwbackend-devel.k8s01.sidt.local/anagrafica/api/v1/stato/elenco/{dataValidita}}
+    statoByCodice: ${URL_ANAGRAFICA_STATO_BY_CODICE:http://apigw-gwbackend-devel.k8s01.sidt.local/anagrafica/api/v1/stato/byCodSta/{codiceStato}}
+    identityMatch: ${URL_IDENTITY_MATCH:http://apigw-gwbackend-devel.k8s01.sidt.local/ade/api/v1/identityMatch}
+    entraConEIDASUrl: ${EIDAS_LOGIN_URL:https://ssoop-coll.servizidt.it/idpop/saml2/jsp/spSSOInit.jsp?metaAlias=/idpopusers//spidsp&idpEntityID=https://sp-proxy.pre.eid.gov.it/spproxy/idpit}
+    annullaEidas: ${ANNULLA_EIDAS_URL:https://idpop-coll.servizidt.it/customlogin/postlogin/logout}
+    IdpInitiatedUrl: ${IDP_INITIATED_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSSOInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&RelayState=https://adspmacscoll.pcspln.cloud/group/portale-adsp}
+    #spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}
+    #idpListUrl: ${IDP_LIST_URL:https://idpspid-coll.pcspln.cloud/registry/idp_list.json}
+    
+    #aggiunto: modifica delle due variabili con le url del lab di vantea di messina
+    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}
+    idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8080/registry/idp_list.json}
+    #
+
+    elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsi.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
+    aggiornaDataUltimaConnessioneUrl: ${AGGIORNA_DATA_ULTIMA_CONNESSIONE_URL:http://apigw-gwbackend-stage.k8s01.sidt.local/utenze/api/v1/utente/aggiornaDataUltimaConnessione}
+  cookieName: ${IDP_COOKIE_NAME:idpsso-coll}
   jwtCookieName: am-auth-jwt
-  oldCookieName: PD-ECC
-  headerName: iv_user
+  oldCookieName: idpsso-coll
+  agentAuthnTxCookie: agent-authn-tx
+  headerName: iv-user
   resetPasswordTargetUrl: https://servizicoll.comune.milano.it/plp?goto=https://portal-coll.ecaas.comune.milano.it/
-  targetUrl: 
+  targetUrl:
+    # aggiornamento: parametro goto di messina
     param: goto
-#    pattern: ^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$
-    pattern: ^https?:\/\/.*\.comune\.milano\.it\/?.*$
-    default: 
+    # aggiornamento: parametro da modificare con la url del porto di messina
+    pattern: ${VALID_GOTO_PATTERN:^https?:\/\/.*\.(pcspln|adspmacscoll.pcspln)\.cloud\/?.*$}
+    default: null
   oauth2:
     pattern: ^https?:\/\/.*\.comune\.milano\.it\/.*\/oauth2\/realms\/root\/realms\/servizi\/authorize.*$
   fakeresponse: false
   captcha_enabled: true
-  logoutRedirectUrl: https://portal-coll.ecaas.comune.milano.it
-  oldLogoutRedirectUrl: https://mas.comune.milano.it/pkmslogout
-  logoutMessageMobile: La sessione e' terminata. Chiudere l'applicazione per effettuare un nuovo accesso.
+  logoutRedirectUrl: ${LOGOUT_REDIRECT_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspmacscoll.pcspln.cloud%2Fweb%2Fportale-adsp%2F}
+  pdtRedirectUrl: ${PDT_REDIRECT_URL:https://adspmacscoll.pcspln.cloud/web/portale-adsp/}
+  undoLogoutRedirectUrl: ${UNDO_LOGOUT_REDIRECT_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspmacscoll.pcspln.cloud%2Fweb%2Fportale-adsp%2Finfo-spid}
+  logoutMessageMobile: La sessione e' terminata. Chiudere l'applicazione per
+    effettuare un nuovo accesso.
   postLogin:
     newUser: http_iv-newcreation
     spidEmail: spidemail
@@ -165,148 +132,134 @@ sso:
     spidMobile: spidmobile
     mobile: cdm_mobile
     spidMobileChanged: http_spidmobilechanged
-    cieEmail: cieemail
-    cieEmailChanged: http_cieemailchanged
-    cieMobile: ciemobile
-    cieMobileChanged: http_ciemobilechanged
     sipoUpdate: cdm_sipoupdate
     newUserCIE: http_iv-newcreation_cie
     iterationLimitcheckProvisioning: 10
     timeLimitCheckProvisioning: 200
     timeBeforeLogout: 6000
     nascitaData: cdm_nascitadata
-    knownUser: http_iv-newcreationknown
+    headerParamNamePostLogin: ${HEADER_PARAM_NAME_MIMS:isfirstaccess}
+    headerParamValuePostLogin: ${HEADER_PARAM_VALUE_MIMS:'yes'}
+    headerParamNameUserId: ${HEADER_PARAM_NAME_USER_ID:iv-user}
+    headerParamNameDataNascita: ${HEADER_PARAM_NAME_BIRTH_DATE:birthdate}
+    dataNascitaFormat: ${BIRTH_DATE_FORMAT:yyyy-MM-dd}
+    randomCodeGroup: ${RANDOM_CODE_GROUP:randomcode.group.}
+    randomCodeGroupNumber: ${RANDOM_CODE_GROUP_NUMBER:10100101}
+    headerParamNameUserName: ${HEADER_PARAM_NAME_USER_NAME:apacs-name}
+    headerParamNameEidasPostLogin: ${HEADER_PARAM_NAME_EIDAS_POST_LOGIN:eidaspostlogin}
+    enableIdentityMatch: true
+    headerParamNameUserSurname: ${HEADER_PARAM_NAME_USER_SURNAME:apacs-surname}
+    numeroTentativi: 1
+    contestiApplicativiAbilitati: ${CONTESTI_APPLICATIVI_ABILITATI:TR}
   cie:
-    enableCheckApp: false # abilita il controllo per mostrare / nascondere il pulsante cie sull'app mobile in base al parametro in query string CIE=yes
+    enableCheckApp: ${CIE_ENABLE_CHECK_APP:false}
   ageCheck:
-    checkAgeEnabled: true # abilita il controllo sull'eta per login spid e cie
-    minAge: 16 # eta minima per cui è consentita la login
-    redirectTimeout: 5000 # timeout per redirect in caso di eta non ammessa, in ms
-  mfa:
-    url: https://sso.comune.milano.it/openam/json/realms/root/realms/servizi/authenticate?authIndexType=service&authIndexValue=CDM_StrongAUTH
-    credentials: https://sso.comune.milano.it/openam/json/realms/root/realms/servizi/authenticate?locale=it&service=CDM_StrongAUTH&authIndexType=service&authIndexValue=CDM_StrongAUTH
-
+    checkAgeEnabled: true
+    minAge: 18
+  redirectTimeout: ${REDIRECT_DEFAULT_TIMEOUT:10000}
+  eidas:
+    username: ${EIDAS_USERNAME:login-api-idp}
+    password: ${EIDAS_PASSWORD:!25-@Dm1nR-3@Lm52!}
 analytics:
   adobe:
     enabled: false
   google:
     enabled: false
-    
-# Sessione anonima
 anon:
   session:
     url:
       sessionByToken: http://localhost:8100/v2/identita/session/anonymous/{token}
       update: http://localhost:8100/v2/identita/session/anonymous
     token:
-      # Validità del token in minuti
       validity: 60
       cookie:
-        # Nome del cookie con il token
         name: ANTKN
         httpOnly: true
         secure: false
         path: /
         domain: localhost
     mail:
-      # Oggetto della mail di invio token
       subject: Accedi al comune senza registrazione
     customApp: SERVIZI_CRM
-    
 mail:
-  from: registrazione.portale@comune.milano.it
-  url: http://localhost:8107/v1/sendEmail  
-
+  from: ${MAIL_FROM:info@ilportaledellautomobilista.it}
+  host: ${MAIL_HOST:emxpfe01.sidt.local}
+  port: ${MAIL_PORT:25}
+  url: ${MAIL_URL:https://www.ilportaledellautomobilista.it/web/portale-automobilista/richiestaInfo}
 logout:
-  logoutOtherUrl:
-#    - name: mas
-#      url: https://mas.comune.milano.it/pkmslogout
-#      method: GET
-#      followRedirect: true
-#      cookieRequest:
-#        - PD-S-SESSION-ID
-#    - name: liferay
-#      url: https://portal-coll.ecaas.comune.milano.it/c/portal/logout
-#      method: GET
-#      followRedirect: true
-
-hcaptcha:
-  captcha_enabled: true
-  key:
-    site: "ab74f6be-3286-4abf-8f6f-3c6ca03e9926"
-    secret: "0x477cC722e98D35FcaFFE572183740daAcF48f472"
-  urlVerifier: https://hcaptcha.com/siteverify
-
+  logoutOtherUrl: null
+google:
+  recaptcha:
+    captcha_enabled: true
+    key:
+      site: 6Let-6AUAAAAAJ7tDgk8iONmF5xbTmLGKGViDGXx
+      secret: 6Let-6AUAAAAAND06Kt2sXtKMwSVv7O-5_9xaT8A
+    urlVerifier: https://www.google.com/recaptcha/api/siteverify?secret={{SECRET_KEY}}&response={{RESPONSE_TEXT}}&remoteip={{REMOTE_IP}}
 header:
-  link: 
-#  link: Comune di Milano|https://www.comune.milano.it/comune|vai alla sezione Comune di Milano;Aree Tematiche|https://www.comune.milano.it/aree-tematiche|vai alla sezione Aree Tematiche;Servizi|https://www.comune.milano.it/servizi|vai alla sezione Servizi;Ufficio Stampa|https://www.comune.milano.it/ufficio-stampa|vai alla sezione Ufficio Stampa
+  link: null
 footer:
   link:
-    utili: Privacy|https://portal-coll.ecaas.comune.milano.it/policy/privacy|vai alla pagina Privacy;Note legali|https://portal-coll.ecaas.comune.milano.it/policy/note-legali|vai alla pagina Note legali;Accessibilità|https://portal-coll.ecaas.comune.milano.it/policy/accessibilita|vai alla pagina Accessibilità
+    utili: Privacy|https://portal-coll.ecaas.comune.milano.it/policy/privacy|vai
+      alla pagina Privacy;Note
+      legali|https://portal-coll.ecaas.comune.milano.it/policy/note-legali|vai
+      alla pagina Note
+      legali;Accessibilità|https://portal-coll.ecaas.comune.milano.it/policy/accessibilita|vai
+      alla pagina Accessibilità
 scrivi:
-  url: Scrivi|https://servizicrm-coll.comune.milano.it/supportoregistrazioni/assistenzatecnica/login|Scrivi al Comune di Milano per richiedere supporto
+  url: Scrivi|https://portal-coll.ecaas.comune.milano.it/scrivi|Scrivi al Comune
+    di Milano per richiedere supporto
 registrati:
-  url: Registrati|https://registrazione-test.comune.milano.it/IAMCM-web/index.jsf|Registrati al portale del Comune di Milano
+  url: Registrati|https://registrazione-test.comune.milano.it/IAMCM-web/index.jsf|Registrati
+    al portale del Comune di Milano
 profilo:
   modifica:
-    #url: Modifica|https://www2.comune.milano.it/IAMCM-web/update.jsf|Gestisci le impostazioni del tuo profilo  
-    url: Modifica|/cdmlogin/selfmodify/changeprofile|Gestisci le impostazioni del tuo profilo
+    url: Modifica|/customlogin/selfmodify/changeprofile|Gestisci le impostazioni del
+      tuo profilo
   fascicolocittadino:
-    url: Accedi|https://portal-coll.ecaas.comune.milano.it/fascicolo-del-cittadino|Accedi al fascicolo digitale del cittadino
-  oblio:
-    url: http://servizicrm-coll.comune.milano.it/Cittadino/RichiestaOblio
-logoutUrl: https://portal-coll.ecaas.comune.milano.it/c/portal/logout
-
-supporto:
-  chat:
-    url: https://registrationcitizentest.azurewebsites.net/qnamaker/knowledgebases/{key}/generateAnswer
-    auth: EndpointKey 741c0b42-86ba-491b-8940-3353bdc71423
-    knowledgeBaseIt: b9041dab-073d-4f0e-aca5-3add4bc86dc2
-    
+    url: Accedi|https://portal-coll.ecaas.comune.milano.it/fascicolo-del-cittadino|Accedi
+      al fascicolo digitale del cittadino
+logoutUrl: https://www.ilportaledellautomobilista.it/c/portal/logout
 homepage:
   link: Homepage|https://portal-coll.ecaas.comune.milano.it|Homepage
 breadcrumb:
   link:
     home: Home|https://portal-coll.ecaas.comune.milano.it|Home
-    accedi: Accedi|/cdmlogin|Accedi
-    recuperaPassword: Recupera Password|/cdmlogin/password/recovery|Recupera Password
-    recuperaIdUtente: Recupera ID utente|/cdmlogin/user/recovery_userid|Recupera ID utente
-    cambioPassword: Cambio Password|/cdmlogin/password/cambio|Cambio Password
-    altreModalita: Altre modalità|/cdmlogin/legacy|Altre modalità
-    resetPassword: Reset|/cdmlogin/password/reset|Reset
-    updateCompanyProfile: Modifica Profilo Azienda|/cdmlogin/selfmodify/changeprofile|Modifica Profilo Azienda
-    updateUserProfile: Modifica Profilo Cittadino|/cdmlogin/selfmodify/changeprofile|Modifica Profilo Cittadino
-
+    accedi: Accedi|/customlogin|Accedi
+    recuperaPassword: Recupera Password|/customlogin/password/recovery|Recupera Password
+    recuperaIdUtente: Recupera ID utente|/customlogin/user/recovery_userid|Recupera ID utente
+    cambioPassword: Cambio Password|/customlogin/password/cambio|Cambio Password
+    altreModalita: Altre modalità|/customlogin/legacy|Altre modalità
+    resetPassword: Reset|/customlogin/password/reset|Reset
+    updateCompanyProfile: Modifica Profilo
+      Azienda|/customlogin/selfmodify/changeprofile|Modifica Profilo Azienda
+    updateUserProfile: Modifica Profilo
+      Cittadino|/customlogin/selfmodify/changeprofile|Modifica Profilo Cittadino
 password:
   link:
-    modificaPassword: Modifica Password|/cdmlogin/password/cambio|Modifica Password
-    
+    modificaPassword: Modifica Password|/customlogin/password/cambio|Modifica Password
 cdm:
   tipo:
     utente:
-      spid: 3                     #valore di cdmTipoUtente
-      #localeResidente: crs        #valore di cdmTipoUtente
-      #nonResidente: pin           #valore di cdmTipoUtente
-      lite: lite                  #valore di cdmTipoUtente
-      cie: 4                      #valore di cdmTipoUtente
-      spidAzienda: 5              #valore di cdmTipoUtente
-  giuridica: G                    #valore di cdmGiuridicaFisica
-  fisica: F                       #valore di cdmGiuridicaFisica
-  residente: A                    #valore di resident
-
+      spid: 3
+      lite: lite
+      cie: 4
+  giuridica: G
+  fisica: F
+  residente: A
 newsletter:
   informami:
     iscrizioneUrl: http://msidentitaapi:8080/v2/identita/newsletter/informami/subscribe
-
-journey:
-  enabled: false
-  id: 1412
-
-#valori di cdmEmployeeType
-employeeType:
-  type:
-    spid: SPID
-    cie: CIE
-    spidaz: SPIDAz
-    adminI: I
-    adminE: E
+ws:
+  endpoint: ${ENDPOINT:http://sicurezza.ilportaledellautomobilista.it/eai/sicurezza-ws-pass/services/dettaglioUtenteMobile}
+  endpointWSDL: ${ENDPOINT_WSDL:http://sicurezza.ilportaledellautomobilista.it/eai/sicurezza-ws-pass/services/dettaglioUtenteMobile/dettaglioUtenteMobile.wsdl}
+forgerock:
+  baseUrl: ${FORGEROCK_BASE_URL:https://ssospid-coll.pcspln.cloud/idp}
+  adminUsername: ${FORGEROCK_ADMIN_USERNAME:login-api-idp}
+  adminPassword: ${FORGEROCK_ADMIN_PASSWORD:zXHZcTDIQViqUyqo}
+  adminAuthenticate: ${FORGEROCK_ADMIN_AUTH_URL:https://ssospid-coll.pcspln.cloud/idp/json/realms/idpusers/authenticate}
+otp:
+  enableOTPHeaderParamName: ${ENABLE_OTP_HEADER_PARAM_NAME:enableOTP}
+  enableCheckApp: ${OTP_ENABLE_CHECK_APP:true}
+  validationMinutes: ${OPT_VALIDATION_MINUTES:5}
+adsp:
+  nodo: 16
