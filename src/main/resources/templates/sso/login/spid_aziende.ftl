@@ -1,22 +1,19 @@
 <#import "/spring.ftl" as spring />
 <#assign accedi_credenziali_spid>
-    <@spring.message "login.spid.messina.page.accedi.credenziali.spid" />
+    <@spring.message "login.spid.azienda.messina.page.accedi.credenziali.spid" />
 </#assign>
 <#assign maggiori_info_spid>
-    <@spring.message "login.spid.messina.page.maggiori.info.spid" />
-</#assign>
-<#assign non_hai_spid>
-    <@spring.message "login.spid.messina.page.non.hai.spid" />
+    <@spring.message "login.spid.azienda.messina.page.maggiori.info.spid" />
 </#assign>
 <#assign info_spid_domanda>
-    <@spring.message "login.spid.messina.page.info.spid.domanda" />
+    <@spring.message "login.spid.azienda.messina.page.info.spid.domanda" />
 </#assign>
 <#assign accesso_area_riservata>
-    <@spring.message "login.spid.messina.page.accesso.area.riservata" />
+    <@spring.message "login.spid.azienda.messina.page.accesso.area.riservata" />
 </#assign>
 <#assign security=JspTaglibs["http://www.springframework.org/security/tags"] />
-<!-- div intro titolo spid user -->
-<div>
+<!-- div intro titolo spid aziende -->
+<div class="mt-4 mt-sm-0">
     <!-- paragrafo -->
     <p class="fw-light mb-0">
         ${accesso_area_riservata}
@@ -24,7 +21,7 @@
     <!-- div titolo e svg info -->
     <div class="d-flex gap-1">
         <!-- titolo -->
-        <h6 class="fw-bold">
+        <h6 class="fw-bold text-break">
             ${accedi_credenziali_spid}
         </h6>
         <!-- svg help circle -->
@@ -39,7 +36,7 @@
         </svg>
     </div>
 </div>
-<!-- div spid user -->
+<!-- div spid aziende -->
 <div class="align-items-center d-sm-flex gap-5 gap-lg-1 gap-xl-5">
     <!-- col list info spid -->
     <div>
@@ -47,9 +44,6 @@
         <ul class="list-unstyled small fw-bold primary-color">
             <li><a href="https://www.spid.gov.it">
                     ${maggiori_info_spid}
-                </a></li>
-            <li><a href="https://www.spid.gov.it/richiedi-spid">
-                    ${non_hai_spid}
                 </a></li>
             <li><a href="https://www.spid.gov.it/serve-aiuto">
                     ${info_spid_domanda}
@@ -63,7 +57,7 @@
             <!-- div bottone e lista idp -->
             <div class="d-grid gap-2 d-sm-block">
                 <a href="#" class="btn italia-it-button italia-it-button-size-m button-spid rounded"
-                    spid-idp-button="#spid-idp-button-medium-post-cittadino" aria-haspopup="true" style="width:auto!important"
+                    spid-idp-button="#spid-idp-button-medium-post-azienda" aria-haspopup="true" style="width:auto!important"
                     aria-expanded="false"> <span class="italia-it-button-icon"><img
                             src="${cdnUrl}${urls.getForLookupPath('/img/spid-ico-circle-bb.svg')}"
                             onerror="this.src=\"
@@ -73,9 +67,9 @@
                         <@spring.message 'login.mobile.app.access.spid' />
                     </span>
                 </a>
-                <div id="spid-idp-button-medium-post-cittadino"
+                <div id="spid-idp-button-medium-post-azienda"
                     class="spid-idp-button spid-idp-button-tip spid-idp-button-relative">
-                    <ul id="spid-idp-list-medium-root-post-cittadino" data-spid-remote-cittadino class="spid-idp-button-menu"
+                    <ul id="spid-idp-list-medium-root-post-azienda" data-spid-remote-azienda class="spid-idp-button-menu"
                         aria-labelledby="spid-idp" data-spid-remote>
                         <li><a class="dropdown-item ps-2 py-2" href="https://www.spid.gov.it">
                                 ${maggiori_info_spid}
