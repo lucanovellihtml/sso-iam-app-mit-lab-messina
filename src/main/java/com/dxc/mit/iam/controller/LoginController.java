@@ -35,7 +35,6 @@ public class LoginController extends BaseController {
      * nell'annotazione @RequestoMapping.
      * 
      */
-
     @RequestMapping(value = { "/", "/login" }, method = { RequestMethod.GET })
     public ModelAndView loginSpid(Principal p,
             @RequestParam(required = false, name = "${sso.targetUrl.param}") String targetUrl,
@@ -117,8 +116,15 @@ public class LoginController extends BaseController {
 
             log.debug("idpListUrl" + this.config.getIdpListUrl());
             log.debug("spInitiatedBaseUrl" + this.config.getSpInitiatedBaseUrl());
+            log.debug("spInitiatedBaseUrlAzienda" + this.config.getSpInitiatedBaseUrlAzienda());
 
+            // Variabile per spid cittadino
             modelAndView.addObject("spInitiatedBaseUrl", this.config.getSpInitiatedBaseUrl());
+
+            // Variabile per spid aziende
+            modelAndView.addObject("spInitiatedBaseUrlAzienda", this.config.getSpInitiatedBaseUrlAzienda());
+
+            // Variabile per la list univoca degli idp
             modelAndView.addObject("idpListUrl", this.config.getIdpListUrl());
             modelAndView.setViewName("/sso/login");
         }
