@@ -421,9 +421,15 @@ public class SSOConfiguration {
     @Value("${sso.redirectTimeout}")
     private Integer redirectTimeout;
 
-    // Variabile che identifica la url per innescare il giro della federazione
+    // Variabile che identifica la url per innescare il giro della federazione per
+    // spid cittadino
     @Value("${sso.url.spInitiatedBaseUrl}")
     private String spInitiatedBaseUrl;
+
+    // Variabile che identifica la url per innescare il giro della federazione per
+    // spid azienda
+    @Value("${sso.url.spInitiatedBaseUrlAzienda}")
+    private String spInitiatedBaseUrlAzienda;
 
     // Variabile che identifica la url per richiamare il json della lista degli IDP
     @Value("${sso.url.idpListUrl}")
@@ -989,6 +995,10 @@ public class SSOConfiguration {
 
     public void setSpInitiatedBaseUrl(String spInitiatedBaseUrl) {
         this.spInitiatedBaseUrl = spInitiatedBaseUrl;
+    }
+
+    public void setSpInitiatedBaseUrlAzienda(String spInitiatedBaseUrlAzienda) {
+        this.spInitiatedBaseUrlAzienda = spInitiatedBaseUrlAzienda;
     }
 
     public void setIdpListUrl(String idpListUrl) {
@@ -1581,6 +1591,11 @@ public class SSOConfiguration {
                 other$spInitiatedBaseUrl = other.getSpInitiatedBaseUrl();
         if ((this$spInitiatedBaseUrl == null) ? (other$spInitiatedBaseUrl != null)
                 : !this$spInitiatedBaseUrl.equals(other$spInitiatedBaseUrl))
+            return false;
+        Object this$spInitiatedBaseUrlAzienda = getSpInitiatedBaseUrlAzienda(),
+                other$spInitiatedBaseUrlAzienda = other.getSpInitiatedBaseUrlAzienda();
+        if ((this$spInitiatedBaseUrlAzienda == null) ? (other$spInitiatedBaseUrlAzienda != null)
+                : !this$spInitiatedBaseUrlAzienda.equals(other$spInitiatedBaseUrlAzienda))
             return false;
         Object this$idpListUrl = getIdpListUrl(), other$idpListUrl = other.getIdpListUrl();
         if ((this$idpListUrl == null) ? (other$idpListUrl != null) : !this$idpListUrl.equals(other$idpListUrl))
@@ -2557,6 +2572,10 @@ public class SSOConfiguration {
 
     public String getSpInitiatedBaseUrl() {
         return this.spInitiatedBaseUrl;
+    }
+
+    public String getSpInitiatedBaseUrlAzienda() {
+        return this.spInitiatedBaseUrlAzienda;
     }
 
     public String getIdpListUrl() {
