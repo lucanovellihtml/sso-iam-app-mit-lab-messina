@@ -96,8 +96,9 @@ sso:
     #spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}
     #idpListUrl: ${IDP_LIST_URL:https://idpspid-coll.pcspln.cloud/registry/idp_list.json}
     
-    #aggiunto: modifica delle due variabili con le url del lab di vantea di messina
-    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}
+    #aggiunto: modifica delle tre variabili con le url del lab di vantea di messina(list idp, url federazione spid aziende, url federazione spid cittadino)
+    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}    
+    spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
     idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8080/registry/idp_list.json}
     #
 
