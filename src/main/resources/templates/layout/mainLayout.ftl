@@ -33,38 +33,25 @@
     <body class="text-dark">
         <div class="container-fluid px-0" style="min-height: calc(100vh - 123.56px);">
             <!-- header -->
-            <header class="it-header-wrapper">
-                <div class="it-nav-wrapper">
-                    <div class="it-header-center-wrapper p-0">
-                        <div class="container px-5">
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <a target="_blank" href="https://pcs.adspstretto.it/web/portale-adsp/home"><img
-                                            src="${cdnUrl}${urls.getForLookupPath('/img/adsp-messina.png')}" alt="Autorita' di Sistema Portuale del Mare Adriatico Centro Settentrionale"
-                                            class="w-100 my-4" style="max-width:800px;"></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <#include "header.ftl" />
             <!-- main -->
             <main>
                 <#include "${viewName}/body.ftl" ignore_missing=true>
             </main>
         </div>
         <!-- footer -->
-        <#include "mainLayoutFooter.ftl">
-            <script>
-            $(function() {
-                $(document).keypress(
-                    function(event) {
-                        if (event.which == '13') {
-                            event.preventDefault();
-                        }
-                    });
-            });
-            </script>
+        <#include "footer.ftl" />
+        <#include "mainLayoutFooter.ftl" />
+        <script>
+        $(function() {
+            $(document).keypress(
+                function(event) {
+                    if (event.which == '13') {
+                        event.preventDefault();
+                    }
+                });
+        });
+        </script>
     </body>
 
     </html>
