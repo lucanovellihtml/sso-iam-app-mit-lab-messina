@@ -120,8 +120,10 @@ sso:
     pattern: ^https?:\/\/.*\.comune\.milano\.it\/.*\/oauth2\/realms\/root\/realms\/servizi\/authorize.*$
   fakeresponse: false
   captcha_enabled: true
+  # aggiornamento: url di default quando la goTo nell metodo redirectToLogout è null o vuota ---> da cambiare con quella di messina
   logoutRedirectUrl: ${LOGOUT_REDIRECT_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspmacscoll.pcspln.cloud%2Fweb%2Fportale-adsp%2F}
   pdtRedirectUrl: ${PDT_REDIRECT_URL:https://adspmacscoll.pcspln.cloud/web/portale-adsp/}
+  # aggiornamento: url di default quando non è presente utenza per accedere
   undoLogoutRedirectUrl: ${UNDO_LOGOUT_REDIRECT_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspmacscoll.pcspln.cloud%2Fweb%2Fportale-adsp%2Finfo-spid}
   logoutMessageMobile: La sessione e' terminata. Chiudere l'applicazione per
     effettuare un nuovo accesso.
