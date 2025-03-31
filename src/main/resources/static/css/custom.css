@@ -1,0 +1,17 @@
+/* BS overrides */
+.form-group .form-check-label.active{
+    transform: none;
+}
+
+.form-check.form-check-group.form-check-group-reverse [type=checkbox]+label, .form-check.form-check-group.form-check-group-reverse  [type=radio]+label{
+    padding-left: 52px;
+    padding-right: 0px;
+}
+
+.form-check.form-check-group.form-check-group-reverse [type=checkbox]+label::after, 
+.form-check.form-check-group.form-check-group-reverse [type=checkbox]+label::before,
+.form-check.form-check-group.form-check-group-reverse [type=radio]+label::after, 
+.form-check.form-check-group.form-check-group-reverse [type=radio]+label::before {
+    left:0px;
+    right:auto;
+ }
