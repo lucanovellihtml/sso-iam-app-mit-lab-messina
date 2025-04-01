@@ -112,6 +112,8 @@ public class SSOConfiguration {
     @Value("${sso.logoutRedirectUrl}")
     private String logoutRedirectUrl;
 
+    // Variabile che identifica la url richiamata quando, nella postlogin, il valore
+    // dell'id utente è null
     @Value("${sso.pdtRedirectUrl}")
     private String pdtRedirectUrl;
 
