@@ -2,6 +2,7 @@ package com.dxc.mit.iam.controller;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -328,7 +329,7 @@ public class LoginController extends BaseController {
      * Controller che gestisce la fase di post accept privacy dell'utente; viene
      * chiamato dopo il login dell'utente quando accetta l'informativa sulla
      * privacy.
-     * Dopo l'accettazione, l'utente viene reindirizzato alla selezione del profilo
+     * Dopo l'accettazione, l'utente viene reindirizzato alla selezione del profilo.
      * 
      * @param headers  Mappa che contiene gli header HTTP della richiesta
      * @param request  Oggetto che rappresenta la richiesta HTTP
@@ -452,6 +453,9 @@ public class LoginController extends BaseController {
         goTo = Optional.<String>ofNullable(goTo).orElse(this.config.getUndoLogoutRedirectUrl());
         if (URLUtil.isValidTargetUrl(goTo, this.config.getTargetUrlPattern()))
             modelAndView.addObject("goto", goTo);
+
+        // log.info("Url modelAndView ---> " + modelAndView.getViewName());
+
         return modelAndView;
     }
 
@@ -498,6 +502,76 @@ public class LoginController extends BaseController {
     public ModelAndView notFound() {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/error/not-found");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = { "/provaselectprofile" }, method = { RequestMethod.GET })
+    public ModelAndView provaSelectProfile() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        UtentePln utente = new UtentePln();
+        UtentePln utenteDue = new UtentePln();
+
+        List<UtentePln> elencoMatricoleUtentePln = Collections.emptyList();
+
+        List<UtentePln> elencoMatricoleUtente = new ArrayList<>();
+
+        utente.setPrgNodoAdsp(new Integer(this.config.getNodoAdsp()));
+        utente.setDesNomUte("Mario Bianchi");
+        utente.setTcpi1ipf(new Tcpi1ipf());
+        utente.getTcpi1ipf().setPrgPosAna(new PrgPosAna());
+        utente.getTcpi1ipf().getPrgPosAna().setCodFisPerFsc("BNCMRA00A01F205L");
+        utente.getTcpi1ipf().getPrgPosAna().setDesNomPerFis("Mario");
+        utente.getTcpi1ipf().getPrgPosAna().setDesCogPerFis("Bianchi");
+        utente.getTcpi1ipf().setPrgIps(new PrgIps());
+        utente.getTcpi1ipf().getPrgIps().setDesDenIps("");
+        utente.getTcpi1ipf().getPrgIps().setCodParIvaIps("12345678901");
+        utente.getTcpi1ipf().getPrgIps().setDesRagSocIps("TechNova Solutions S.r.l.");
+
+        utenteDue.setPrgNodoAdsp(new Integer(this.config.getNodoAdsp()));
+        utenteDue.setDesNomUte("Mario Rossi");
+        utenteDue.setTcpi1ipf(new Tcpi1ipf());
+        utenteDue.getTcpi1ipf().setPrgPosAna(new PrgPosAna());
+        utenteDue.getTcpi1ipf().getPrgPosAna().setCodFisPerFsc("RSSMRA00A01F205F");
+        utenteDue.getTcpi1ipf().getPrgPosAna().setDesNomPerFis("Mario");
+        utenteDue.getTcpi1ipf().getPrgPosAna().setDesCogPerFis("Rossi");
+        utenteDue.getTcpi1ipf().setPrgIps(new PrgIps());
+        utenteDue.getTcpi1ipf().getPrgIps().setDesDenIps("");
+        utenteDue.getTcpi1ipf().getPrgIps().setCodParIvaIps("12345678902");
+        utenteDue.getTcpi1ipf().getPrgIps().setDesRagSocIps("Vantea Solutions S.r.l.");
+
+        elencoMatricoleUtente.add(utente);
+        elencoMatricoleUtente.add(utenteDue);
+
+        if (elencoMatricoleUtente.size() > 0)
+            elencoMatricoleUtentePln = elencoMatricoleUtente;
+
+        try {
+            if (!CollectionUtils.isEmpty(elencoMatricoleUtentePln)) {
+                modelAndView.addObject("elencoMatricoleUtente",
+                        this.objectMapper.writeValueAsString(elencoMatricoleUtentePln));
+            }
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        modelAndView.setViewName("/postlogin/select-profile");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = { "/provaprivacy" }, method = { RequestMethod.GET })
+    public ModelAndView provaPrivacy() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/postlogin/privacy");
+        return modelAndView;
+    }
+
+    @RequestMapping(value = { "/provaerrorlogout" }, method = RequestMethod.GET)
+    public ModelAndView provaErrorLogout() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("error_msg", "postlogin.generic.error.message");
+        modelAndView.setViewName("/postlogin/errorLogout");
         return modelAndView;
     }
 
