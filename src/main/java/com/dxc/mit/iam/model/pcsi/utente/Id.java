@@ -3,7 +3,7 @@ package com.dxc.mit.iam.model.pcsi.utente;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
- * Classe che rappresenta un'identificativo di un'entità(comune o provincia)
+ * Classe che rappresenta un'identificativo di un'entità(comune o provincia).
  */
 public class Id {
   /*
