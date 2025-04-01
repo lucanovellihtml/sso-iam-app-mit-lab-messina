@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /*
  * Classe che rappresenta un'entità con molteplici 
- * attributi legati a un soggetto identificato da un codice IPS.
+ * attributi legati a un soggetto identificato da un codice IPS(soggetogiuridico o una persona fisica).
  */
 public class PrgIps {
   /*
