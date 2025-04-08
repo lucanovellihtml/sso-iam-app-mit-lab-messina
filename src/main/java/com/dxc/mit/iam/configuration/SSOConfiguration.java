@@ -10,6 +10,7 @@ public class SSOConfiguration {
     @Value("${sso.url.authenticate}")
     private String authenticateUrl;
 
+    // Variabile che identifica il token di sessione sso
     @Value("${sso.cookieName}")
     private String cookieName;
 
@@ -219,18 +220,22 @@ public class SSOConfiguration {
     @Value("${sso.postLogin.dataNascitaFormat}")
     private String dataNascitaFormat;
 
+    // Variabile che identifica la base url della console di AM
     @Value("${forgerock.baseUrl}")
     private String forgerockBaseUrl;
 
     @Value("${sso.url.IdpInitiatedUrl}")
     private String forgerockIdpInitiatedUrl;
 
+    // Variabile che identifica username admin per l'accesso alla console AM
     @Value("${forgerock.adminUsername}")
     private String forgerockAdminUsername;
 
+    // Variabile che identifica la password admin per l'accesso alla console AM
     @Value("${forgerock.adminPassword}")
     private String forgerockAdminPassword;
 
+    // Variabile che identifica il path di AM
     @Value("${forgerock.adminAuthenticate}")
     private String forgerockAdminAuthenticate;
 
