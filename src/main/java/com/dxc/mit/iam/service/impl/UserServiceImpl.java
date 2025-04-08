@@ -55,10 +55,11 @@ public class UserServiceImpl extends SSOAbstractService implements UserService {
   private static final Logger log = LoggerFactory.getLogger(com.dxc.mit.iam.service.impl.UserServiceImpl.class);
 
   public void updateIdPUser(String uid, IdPUserUpdate userToUdpate) {
+    String method = "[updateIdPUser]::";
     String token = authenticate();
     try {
       String url = this.config.getForgerockBaseUrl() + "/json/realms/idpusers/users/"
-          + this.config.getForgerockBaseUrl();
+          + uid;
       String json = this.objectMapper.writeValueAsString(userToUdpate);
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
@@ -66,26 +67,27 @@ public class UserServiceImpl extends SSOAbstractService implements UserService {
       headers.set("Accept-API-Version", "protocol=2.1,resource=3.0");
       headers.set("If-Match", "*");
       HttpEntity<String> request = new HttpEntity(json, (MultiValueMap) headers);
-      log.error("chiamata update ido user con token : " + token);
-      log.error(json);
+      log.debug(method + "chiamata update idp user con token : " + token);
+      log.debug(method + "[" + json + "]");
       ResponseEntity<String> responseEntity = this.restTemplate.exchange(url, HttpMethod.PUT, request, String.class,
           new Object[0]);
       if (responseEntity.getStatusCode() != HttpStatus.OK) {
-        log.error("errore chiamata update ido user con token : " + token);
-        log.error((String) responseEntity.getBody());
+        log.error(method + "errore chiamata update idp user con token : " + token);
+        log.error(method + (String) responseEntity.getBody());
       }
     } catch (Exception e) {
-      log.error("errore chiamata update ido user con token : " + token);
-      log.error(e.getMessage());
+      log.error(method + "errore chiamata update ido user con token : " + token);
+      log.error(method + e.getMessage());
     }
   }
 
   public IdPUserResponse getIdPUser(String uid) {
+    String method = "[getIdpUser]::";
     IdPUserResponse idPUserResponse = null;
     String token = authenticate();
     try {
       String url = this.config.getForgerockBaseUrl() + "/json/realms/idpusers/users/"
-          + this.config.getForgerockBaseUrl();
+          + uid;
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
       headers.set(this.config.getCookieName(), token);
@@ -94,7 +96,7 @@ public class UserServiceImpl extends SSOAbstractService implements UserService {
       idPUserResponse = (IdPUserResponse) this.restTemplate
           .exchange(url, HttpMethod.GET, request, IdPUserResponse.class, new Object[0]).getBody();
     } catch (Exception e) {
-      log.error("Errore getUser=" + e.getCause(), e);
+      log.error(method + "Errore getUser=" + e.getCause(), e);
     }
     return idPUserResponse;
   }
@@ -132,9 +134,10 @@ public class UserServiceImpl extends SSOAbstractService implements UserService {
   }
 
   public String authenticate() {
+    String method = "[authenticate]::";
     try {
-      log.error("token singleton=" + TokenSingleton.getToken());
-      log.error("token singleton valid session=" + isSessionValid(TokenSingleton.getToken()));
+      log.debug(method + "token singleton=" + TokenSingleton.getToken());
+      log.debug(method + "token singleton valid session=" + isSessionValid(TokenSingleton.getToken()));
       if (TokenSingleton.getToken() == null || !isSessionValid(TokenSingleton.getToken())) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -142,23 +145,24 @@ public class UserServiceImpl extends SSOAbstractService implements UserService {
         headers.set("X-OpenAM-Password", this.config.getForgerockAdminPassword());
         headers.set("Accept-API-Version", "resource=2.0");
         HttpEntity<String> request = new HttpEntity((MultiValueMap) headers);
-        log.error("start authenticate idp: " + this.config.getForgerockAdminAuthenticate());
+        log.debug(method + "start authenticate idp: " + this.config.getForgerockAdminAuthenticate());
         ResponseEntity<AuthenticateResponse> responseEntity = this.restTemplate.exchange(
             this.config.getForgerockAdminAuthenticate(), HttpMethod.POST, request, AuthenticateResponse.class,
             new Object[0]);
         String token = ((AuthenticateResponse) responseEntity.getBody()).getTokenId();
         TokenSingleton.setToken(token);
-        log.error("end authenticate idp: " + this.config.getForgerockAdminAuthenticate());
-        log.error("token da autenticazione=" + token);
+        log.debug(method + "end authenticate idp: " + this.config.getForgerockAdminAuthenticate());
+        log.debug(method + "token di autenticazione=" + token);
         return token;
       }
       return TokenSingleton.getToken();
     } catch (HttpStatusCodeException ex) {
-      log.error("error authenticate idp: " + ex.getStatusCode() + " " + ex.getMessage());
+      log.debug(method + "error authenticate idp: " + ex.getStatusCode() + " " + ex.getMessage());
       return TokenSingleton.getToken();
     } catch (Exception e) {
-      log.error("" + e + " " + e);
-      throw new GenericException("Impossibile contattare l'url: " + this.config.getForgerockAdminAuthenticate() + e);
+      log.error(method + "" + e + " " + e);
+      throw new GenericException(
+          method + "Impossibile contattare l'url: " + this.config.getForgerockAdminAuthenticate() + e);
     }
   }
 
@@ -208,25 +212,27 @@ public class UserServiceImpl extends SSOAbstractService implements UserService {
   }
 
   public List<UtentePln> findUtentiByCodiceFiscale(UtentePln utente) {
+    String method = "[findUtentiByCodiceFiscale]::";
     ResponseEntity<List<UtentePln>> response = null;
     List<UtentePln> result = Collections.emptyList();
     String url = this.config.getElencoSediUtenteUrl();
     ObjectMapper mapper = new ObjectMapper();
-    log.debug("CHIAMATA PER RECUPERO MATRICOLE" + url);
+    log.debug(method + "CHIAMATA PER RECUPERO MATRICOLE: " + url);
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("Content-Type", "application/json");
     try {
       HttpEntity<String> request = new HttpEntity(mapper.writeValueAsString(utente), (MultiValueMap) headers);
-      log.debug("REQUEST:------------------------- " + request);
+      log.debug(method + "REQUEST:------------------------- " + request);
       result = Arrays
           .asList((UtentePln[]) this.restTemplate.postForObject(url, request, UtentePln[].class, new Object[0]));
     } catch (org.springframework.web.client.HttpClientErrorException.NotFound e) {
-      log.error(String.format("Nessuna matricola attiva abilitata all'accesso con SPID per la ricerca",
+      log.error(String.format(method
+          + "Nessuna matricola attiva abilitata all'accesso con SPID per la ricerca",
           new Object[] { utente.toString() }));
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new GenericException("errore", e);
+      throw new GenericException(method + "errore", e);
     }
     return result;
   }
