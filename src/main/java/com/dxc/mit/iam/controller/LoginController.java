@@ -2,8 +2,10 @@ package com.dxc.mit.iam.controller;
 
 import java.security.Principal;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +32,7 @@ import org.springframework.web.util.WebUtils;
 import com.dxc.mit.iam.configuration.FreemarkerClassPathTldsLoader;
 import com.dxc.mit.iam.model.IdPUserResponse;
 import com.dxc.mit.iam.model.IdPUserUpdate;
+import com.dxc.mit.iam.model.msutenze.AggiornaDataUltimaConnessioneRequest;
 import com.dxc.mit.iam.model.pcsi.utente.PrgIps;
 import com.dxc.mit.iam.model.pcsi.utente.PrgPosAna;
 import com.dxc.mit.iam.model.pcsi.utente.Tcpi1ipf;
@@ -278,25 +282,50 @@ public class LoginController extends BaseController {
          */
         List<UtentePln> elencoMatricoleUtentePln = Collections.emptyList();
         try {
+            // TODO commentato per aggirare la chiamata REST
+            // this.userService.findUtentiByCodiceFiscale che interroga un servizio esterno
+            // al db di Ravenna e non di Messina; non abbiamo ancora il servizio per
+            // Messina.
+            /*
+             * UtentePln utente = new UtentePln();
+             * utente.setPrgNodoAdsp(new Integer(this.config.getNodoAdsp()));
+             * utente.setDesNomUte("");
+             * utente.setTcpi1ipf(new Tcpi1ipf());
+             * utente.getTcpi1ipf().setPrgPosAna(new PrgPosAna());
+             * utente.getTcpi1ipf().getPrgPosAna().setCodFisPerFsc(headers.getOrDefault(this
+             * .config.getHeaderName(), ""));
+             * utente.getTcpi1ipf().getPrgPosAna().setDesNomPerFis("");
+             * utente.getTcpi1ipf().getPrgPosAna().setDesCogPerFis("");
+             * utente.getTcpi1ipf().setPrgIps(new PrgIps());
+             * utente.getTcpi1ipf().getPrgIps().setDesDenIps("");
+             * utente.getTcpi1ipf().getPrgIps().setCodParIvaIps("");
+             * elencoMatricoleUtentePln =
+             * this.userService.findUtentiByCodiceFiscale(utente);
+             */
             UtentePln utente = new UtentePln();
             utente.setPrgNodoAdsp(new Integer(this.config.getNodoAdsp()));
-            utente.setDesNomUte("");
+            utente.setDesNomUte("SpidValidator AgID");
             utente.setTcpi1ipf(new Tcpi1ipf());
             utente.getTcpi1ipf().setPrgPosAna(new PrgPosAna());
-            utente.getTcpi1ipf().getPrgPosAna().setCodFisPerFsc(headers.getOrDefault(this.config.getHeaderName(), ""));
-            utente.getTcpi1ipf().getPrgPosAna().setDesNomPerFis("");
-            utente.getTcpi1ipf().getPrgPosAna().setDesCogPerFis("");
+            utente.getTcpi1ipf().getPrgPosAna().setCodFisPerFsc("GDASDV00A01H501J");
+            utente.getTcpi1ipf().getPrgPosAna().setDesNomPerFis("SpidValidator");
+            utente.getTcpi1ipf().getPrgPosAna().setDesCogPerFis("AgID");
             utente.getTcpi1ipf().setPrgIps(new PrgIps());
             utente.getTcpi1ipf().getPrgIps().setDesDenIps("");
-            utente.getTcpi1ipf().getPrgIps().setCodParIvaIps("");
-            elencoMatricoleUtentePln = this.userService.findUtentiByCodiceFiscale(utente);
+            utente.getTcpi1ipf().getPrgIps().setCodParIvaIps("12345678901");
+            utente.getTcpi1ipf().getPrgIps().setDesRagSocIps("TechNova Solutions S.r.l.");
+            List<UtentePln> elencoMatricoleUtente = new ArrayList<>();
+            elencoMatricoleUtente.add(utente);
+            elencoMatricoleUtentePln = elencoMatricoleUtente;
         } catch (Exception e) {
             log.error(e.getMessage());
             return getErrorModelAndView(modelAndView, "postlogin.generic.error.message",
                     this.config.getRedirectTimeout(), null, "/postlogin/errorLogout");
         }
+
         log.debug("Matricole attive per l'utente e abilitate all'accesso SPID recuperate: {}",
                 Integer.valueOf(elencoMatricoleUtentePln.size()));
+
         if (CollectionUtils.isEmpty(elencoMatricoleUtentePln)) {
             log.debug("Nessuna matricola trovata, resetto per sicurezza l'attributo employeenumber");
             IdPUserUpdate idPUser = new IdPUserUpdate();
@@ -314,6 +343,7 @@ public class LoginController extends BaseController {
             modelAndView.addObject("nomeEcognome", getNomeEcognomeUtenteConnesso(headers));
             return modelAndView;
         }
+
         request.getSession().setAttribute("elencoMatricoleUtente", elencoMatricoleUtentePln);
 
         /*
@@ -373,6 +403,165 @@ public class LoginController extends BaseController {
         modelAndView.addObject("elencoMatricoleUtente", this.objectMapper.writeValueAsString(elencoMatricoleUtente));
         modelAndView.setViewName("/postlogin/select-profile");
         modelAndView.addObject("logoutTimeout", Integer.valueOf(180000));
+        return modelAndView;
+    }
+
+    /**
+     * Controller che gestisce la fase di post selected matricola utente;
+     * Dopo che è stato selezionato l'utente, viene reindirizzato alla pagina di
+     * /postlogin/accept-privacy.
+     * 
+     * @param selectedProfile Profilo selezionato(matricola) inviato dal form del
+     *                        client
+     * @param headers         Mappa che contiene gli header HTTP della richiesta
+     * @param request         Oggetto che rappresenta la richiesta HTTP
+     * @param response        Oggetto che rappresenta la risposta HTTP
+     * @return la pagina di accettazione della privacy
+     */
+    @RequestMapping(value = { "/postlogin/select-profile" }, method = { RequestMethod.POST })
+    public ModelAndView selectProfile(@ModelAttribute("selected") String selectedProfile,
+            @RequestHeader Map<String, String> headers, HttpServletRequest request, HttpServletResponse response) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        /*
+         * Controlla se l’utente ha accettato la privacy (memorizzata in sessione).
+         * Se non è accettata, viene mostrata la pagina di errore.
+         */
+        Boolean privacy = Optional.<Boolean>ofNullable((Boolean) request.getSession().getAttribute("privacy"))
+                .orElse(Boolean.FALSE);
+        if (Boolean.FALSE.equals(privacy)) {
+            log.debug(
+                    "Utente non ha accettato la privacy ma ha provato ad attterrare comunque su questa pagina, vado in errore");
+            modelAndView.addObject("error_msg", "privacy.generic.error.message");
+            modelAndView.addObject("logoutTimeout", this.config.getRedirectTimeout());
+            modelAndView.setViewName("/postlogin/errorLogout");
+            return modelAndView;
+        }
+
+        /*
+         * Controlla se l'utente ha selezionato un profilo.
+         * Se non è selezionata, viene mostrato il messaggio di errore e viene
+         * ricaricata la stessa pagina di select-profile.
+         */
+        if (!StringUtils.hasText(selectedProfile)) {
+            log.debug("Utente non selezionato una matricola, vado in errore");
+            modelAndView.addObject("error_msg", "postlogin.select.profile.error.no-selected-profile");
+            modelAndView.setViewName("/postlogin/select-profile");
+            return modelAndView;
+        }
+
+        /*
+         * Recupera dalla sessione tutte le matricole associate all’utente.
+         * Verifica se quella selezionata esiste nella lista.
+         * Se la matricola selezionata non è presente tra quelle abilitate, viene
+         * restituita la pagina errorLogout.
+         */
+        List<UtentePln> elencoMatricoleUtente = Optional
+                .<List<UtentePln>>ofNullable(
+                        (List<UtentePln>) request.getSession().getAttribute("elencoMatricoleUtente"))
+                .orElse(Collections.emptyList());
+        Boolean userNotHasMatricolaEnabled = Boolean.valueOf(
+                elencoMatricoleUtente.stream().noneMatch(x -> x.getDesNomUte().equalsIgnoreCase(selectedProfile)));
+        if (Boolean.TRUE.equals(userNotHasMatricolaEnabled)) {
+            log.debug("Utente non ha la matricola selezionata nell'elenco di quelle a lui abilitate, vado in errore");
+            modelAndView.addObject("error_msg", "privacy.generic.error.message");
+            modelAndView.addObject("logoutTimeout", this.config.getRedirectTimeout());
+            modelAndView.setViewName("/postlogin/errorLogout");
+            return modelAndView;
+        }
+
+        /*
+         * Viene aggiornata l'utenza giè esistente sullo user store con le informazioni
+         * dell'utenza spid.
+         * 
+         * I dati passati sono i seguenti:
+         * - selectedProfile (la matricola selezionata)
+         * - isImpersonate = YES
+         * - privacy = true
+         * - dataRegistrazione = now
+         * 
+         * Dopo l'aggiornamento dei dati, viene chiamato il metodo postLoginComplete()
+         * per innescare la fine del giro di login e reindirizzare l'utente alla view
+         * successiva.
+         */
+        log.debug("Aggiorno l'utente con la matricola selezionata");
+        IdPUserUpdate idPUser = new IdPUserUpdate();
+        idPUser.setEmployeeNumber(selectedProfile);
+        idPUser.setIsImpersonate("YES");
+        idPUser.setPrivacy("true");
+        idPUser.setDataRegistrazione((new SimpleDateFormat("yyyy-MM-dd HH:mm:sss")).format(new Date()));
+        try {
+            log.debug("Aggiorno l'utente con la matricola selezionata {}", idPUser.toString());
+            updateIdpUser(idPUser, request, headers);
+            modelAndView = postLoginComplete(request, response);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            modelAndView = new ModelAndView();
+            modelAndView.addObject("error_msg", "postlogin.generic.error.message");
+            modelAndView.addObject("logoutTimeout", this.config.getRedirectTimeout());
+            modelAndView.setViewName("/postlogin/errorLogout");
+            return modelAndView;
+        }
+
+        /*
+         * Metodo per aggiornare e tracciare la data dell'ultima connessione
+         * dell'utente.
+         */
+        AggiornaDataUltimaConnessioneRequest aggiornaDataUltimaConnessioneRequest = new AggiornaDataUltimaConnessioneRequest(
+                selectedProfile);
+        try {
+            log.debug("Aggiorno l'utente con la data ultima connessione {}",
+                    aggiornaDataUltimaConnessioneRequest.toString());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return modelAndView;
+    }
+
+    /**
+     * Controller che gestisce la fase finale della login, dopo che l'utente ha
+     * selezionato la matricola corretta.
+     * 
+     * @param httpServletRequest  Oggetto per leggere la sessione
+     * @param httpServletResponse Oggetto per leggere la sessione
+     * @return
+     */
+    @RequestMapping(value = { "/postlogin/complete" }, method = { RequestMethod.POST })
+    public ModelAndView postLoginComplete(HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse) {
+        ModelAndView modelAndView = new ModelAndView();
+        log.debug("post login complete method");
+
+        /*
+         * Viene letto dalla sessione il parametro goTo;
+         * Viene verificato che sia valida la url del goTo e in caso affermativo viene
+         * creata una RedirectView che redirige direttamente alla URL target (goTo),
+         * senza aggiungere variabili o parametri di contesto.
+         * Il metodo "httpServletRequest.getSession().invalidate()" invalida la
+         * sessione, questo per permette di evitare che informazioni sensibili restino
+         * in memoria.
+         * In caso di errore, l'utente viene reindirizzato alla pagina di errore.
+         */
+        String goTo = (String) httpServletRequest.getSession().getAttribute(this.config.getTargetUrlParam());
+        log.debug("Found goTo parameter: " + goTo);
+        try {
+            if (StringUtils.hasText(goTo) && URLUtil.isValidTargetUrl(goTo, this.config.getTargetUrlPattern())) {
+                log.debug("Redirect to goTo " + goTo);
+                RedirectView redirect = new RedirectView(goTo);
+                redirect.setContextRelative(false);
+                redirect.setExposePathVariables(false);
+                redirect.setExposeModelAttributes(false);
+                modelAndView.setView((View) redirect);
+                log.debug("Invalidating session");
+                httpServletRequest.getSession().invalidate();
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            modelAndView = new ModelAndView();
+            modelAndView.addObject("error_msg", "privacy.generic.error.message");
+            modelAndView.addObject("logoutTimeout", this.config.getRedirectTimeout());
+            modelAndView.setViewName("/postlogin/errorLogout");
+        }
         return modelAndView;
     }
 
