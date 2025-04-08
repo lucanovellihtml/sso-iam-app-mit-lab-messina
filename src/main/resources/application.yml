@@ -99,7 +99,7 @@ sso:
     #aggiunto: modifica delle tre variabili con le url del lab di vantea di messina(list idp, url federazione spid aziende, url federazione spid cittadino)
     spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}    
     spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
-    idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8080/registry/idp_list.json}
+    idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8081/registry/idp_list.json}
     #
 
     elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsi.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
@@ -256,11 +256,12 @@ newsletter:
 ws:
   endpoint: ${ENDPOINT:http://sicurezza.ilportaledellautomobilista.it/eai/sicurezza-ws-pass/services/dettaglioUtenteMobile}
   endpointWSDL: ${ENDPOINT_WSDL:http://sicurezza.ilportaledellautomobilista.it/eai/sicurezza-ws-pass/services/dettaglioUtenteMobile/dettaglioUtenteMobile.wsdl}
+# Aggiornamento: aggiornate le url di AM con le url di AM messina lab vantea --> aggiornare piu' avanti con le url vere
 forgerock:
-  baseUrl: ${FORGEROCK_BASE_URL:https://ssospid-coll.pcspln.cloud/idp}
+  baseUrl: ${FORGEROCK_BASE_URL:http://openam.strettomessina.it:8080/openam}
   adminUsername: ${FORGEROCK_ADMIN_USERNAME:login-api-idp}
-  adminPassword: ${FORGEROCK_ADMIN_PASSWORD:zXHZcTDIQViqUyqo}
-  adminAuthenticate: ${FORGEROCK_ADMIN_AUTH_URL:https://ssospid-coll.pcspln.cloud/idp/json/realms/idpusers/authenticate}
+  adminPassword: ${FORGEROCK_ADMIN_PASSWORD:Password01}
+  adminAuthenticate: ${FORGEROCK_ADMIN_AUTH_URL:http://openam.strettomessina.it:8080/openam/json/realms/idpusers/authenticate}
 otp:
   enableOTPHeaderParamName: ${ENABLE_OTP_HEADER_PARAM_NAME:enableOTP}
   enableCheckApp: ${OTP_ENABLE_CHECK_APP:true}
