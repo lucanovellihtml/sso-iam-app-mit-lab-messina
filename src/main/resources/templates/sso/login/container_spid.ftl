@@ -4,7 +4,7 @@
 </#assign>
 <#noautoesc>
     <script>
-    const idpListUrl = "${idpListUrl}?t=${longTimeH}"
+    const idpListUrl = "${idpListUrl}"
     const spInitiatedBaseUrl = "${spInitiatedBaseUrl}"
     const spInitiatedBaseUrlAzienda = "${spInitiatedBaseUrlAzienda}"
     </script>
