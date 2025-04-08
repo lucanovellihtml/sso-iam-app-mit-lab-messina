@@ -183,6 +183,10 @@ public class LoginController extends BaseController {
                 .orElse("yes");
         log.debug("Found MIMSpostLogin parameter: " + isFirstAccessHeader);
 
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
+            log.debug("HEADERS [" + entry.getKey() + ": " + entry.getValue() + "]");
+        }
+
         /*
          * Recupera dati utente dagli header HTTP:
          * 
@@ -192,12 +196,13 @@ public class LoginController extends BaseController {
          * dateFormat: Formato della data di nascita.
          */
         String idUtente = headers.get(this.config.getHeaderParamNameUserId());
-        int minAge = this.config.getMinAge();
-        log.debug("Found minAge parameter: " + minAge);
-        String nascitaData = headers.get(this.config.getHeaderParamNameDataNascita());
-        log.debug("Found nascitaData parameter: " + nascitaData);
-        String dateFormat = this.config.getDataNascitaFormat();
-        log.debug("Found dateFormat parameter: " + minAge);
+        // int minAge = this.config.getMinAge();
+        // log.debug("Found minAge parameter: " + minAge);
+        // String nascitaData =
+        // headers.get(this.config.getHeaderParamNameDataNascita());
+        // log.debug("Found nascitaData parameter: " + nascitaData);
+        // String dateFormat = this.config.getDataNascitaFormat();
+        // log.debug("Found dateFormat parameter: " + minAge);
         log.debug("UTENTE-------------------: " + idUtente);
 
         /*
@@ -217,16 +222,19 @@ public class LoginController extends BaseController {
          * La pagina di errore è settata nella variabile del file yml --->
          * "${sso.pdtRedirectUrl}"
          */
-        if (checkAge(nascitaData, dateFormat, minAge)) {
-            log.debug("age <18");
-            modelAndView.setView((View) redirect(this.config.getPdtRedirectUrl(), false));
-            return modelAndView;
-        }
+        /*
+         * if (checkAge(nascitaData, dateFormat, minAge)) {
+         * log.debug("age <18");
+         * modelAndView.setView((View) redirect(this.config.getPdtRedirectUrl(),
+         * false));
+         * return modelAndView;
+         * }
+         */
 
         /*
          * Vengono recuperati i dati dell'utente attraverso il metodo getIdpUser.
          * Il metodo getIdpUser accetta come parametro la request dell'IDP e l'headers
-         * della request, da cui elabora ed estrare i dati per costruire l'oggetto
+         * della request, da cui elabora ed estrarre i dati per costruire l'oggetto
          * idpUser.
          * In caso di fallimento viene restituita la pagina di errore
          * "/postlogin/errorLogout".
@@ -234,7 +242,7 @@ public class LoginController extends BaseController {
         IdPUserResponse idpUser = new IdPUserResponse();
         log.debug("Recupero utente su IDP");
         try {
-            log.error("header passata ad utente = " + headers.toString());
+            log.debug("header passata ad utente = " + headers.toString());
             idpUser = getIdpUser(request, headers);
         } catch (Exception e) {
             log.error("Errore su recupero utente = " + e.getCause());
