@@ -122,17 +122,18 @@ public class BaseController {
      */
     protected IdPUserResponse getIdpUser(HttpServletRequest request, Map<String, String> headers)
             throws UserNotFoundException, NotFoundException {
+        String method = "[getIdpUser]::";
         IdPUserResponse idPUserResponse = null;
         Cookie cookie = WebUtils.getCookie(request, this.config.getCookieName());
         if (cookie != null && headers != null) {
-            log.debug("Found token {}= {}", cookie.getName(), cookie.getValue());
+            log.debug(method + "Found token {}= {}", cookie.getName(), cookie.getValue());
             String idUtente = headers.get(this.config.getHeaderParamNameUserId());
             if (StringUtils.hasText(idUtente)) {
-                log.debug("idUtente: " + idUtente);
+                log.debug(method + "idUtente: " + idUtente);
                 idPUserResponse = this.userService.getIdPUser(idUtente);
-                log.debug("GET USER OK");
+                log.debug(method + "GET USER OK");
             } else {
-                throw new NotFoundException("Utente in sessione non trovato");
+                throw new NotFoundException(method + "Utente in sessione non trovato");
             }
         }
         return (IdPUserResponse) Optional.<IdPUserResponse>ofNullable(idPUserResponse)
