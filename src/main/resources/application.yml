@@ -96,12 +96,12 @@ sso:
     #spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}
     #idpListUrl: ${IDP_LIST_URL:https://idpspid-coll.pcspln.cloud/registry/idp_list.json}
     
-    #aggiunto: modifica delle tre variabili con le url del lab di vantea di messina(list idp, url federazione spid aziende, url federazione spid cittadino)
+    # aggiunto: modifica delle tre variabili con le url del lab di vantea di messina(list idp, url federazione spid aziende, url federazione spid cittadino)
     spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}    
     spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
     idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8081/registry/idp_list.json}
     #
-
+    # aggiornamento: modificare successivamente la url del db esterno per recuperare la lista degli utenti
     elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsi.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
     aggiornaDataUltimaConnessioneUrl: ${AGGIORNA_DATA_ULTIMA_CONNESSIONE_URL:http://apigw-gwbackend-stage.k8s01.sidt.local/utenze/api/v1/utente/aggiornaDataUltimaConnessione}
   cookieName: ${IDP_COOKIE_NAME:idpsso-coll}
