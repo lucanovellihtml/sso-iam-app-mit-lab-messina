@@ -266,6 +266,7 @@ public class SSOConfiguration {
     @Value("${sso.cookieName}")
     private String idpCookieName;
 
+    // Variabile che identifica il servizio del db esterno
     @Value("${sso.url.elencoSediUtenteUrl}")
     private String elencoSediUtenteUrl;
 
