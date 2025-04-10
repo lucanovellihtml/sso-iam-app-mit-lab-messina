@@ -125,7 +125,7 @@ sso:
   # aggiornamento: url di default quando, nella postlogin, l'id utente è null ---> da cambiare con quella di messina
   pdtRedirectUrl: ${PDT_REDIRECT_URL:https://adspmacscoll.pcspln.cloud/web/portale-adsp/}
   # aggiornamento: url di default quando non è presente utenza per accedere
-  undoLogoutRedirectUrl: ${UNDO_LOGOUT_REDIRECT_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspmacscoll.pcspln.cloud%2Fweb%2Fportale-adsp%2Finfo-spid}
+  undoLogoutRedirectUrl: ${UNDO_LOGOUT_REDIRECT_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/spidsp&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspstretto.it}
   logoutMessageMobile: La sessione e' terminata. Chiudere l'applicazione per
     effettuare un nuovo accesso.
   postLogin:
