@@ -28,11 +28,10 @@
             ${accedi_credenziali_spid}
         </h6>
         <!-- svg help circle -->
-        <svg style="fill: #06c !important;" class="icon icon-sm icon-primary" data-container="body"
-            data-toggle="popover" data-trigger="hover" data-placement="bottom" data-html="true"
+        <svg style="fill: #06c !important;" class="icon icon-sm icon-primary" data-bs-container="body"
+            data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-html="true"
             title=""
-            data-content="<div><b>SPID TIPO 1</b> - Identità digitale della persona fisica</div>
-                                                                                                                                                                                          <div><b>SPID TIPO 3</b> - Identità digitale ad uso professionale della persona fisica</div>"
+            data-bs-content="<div><b>SPID TIPO 1</b> - Identità digitale della persona fisica</div>"
             data-original-title="">
             <use href="${cdnUrl}${urls.getForLookupPath('/bsitalia/svg/sprites.svg')}#it-help-circle"
                 xlink:href="${cdnUrl}${urls.getForLookupPath('/bsitalia/svg/sprites.svg')}#it-help-circle"></use>
