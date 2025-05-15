@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sso-iam-app-mit-deployment
+spec:
+  replicas: 1 # Numero di repliche (istanze) della tua applicazione
+  selector:
+    matchLabels:
+      app: sso-iam-app-mit
+  template:
+    metadata:
+      labels:
+        app: sso-iam-app-mit
+    spec:
+      containers:
+        - name: sso-iam-app-mit-container
+          image: sso-iam-app-mit:0.0.1-SNAPSHOT # Sostituisci con la tua immagine Docker
+          ports:
+            - containerPort: 3000 # La porta su cui la tua applicazione è in ascolto nel container
