@@ -3,7 +3,5 @@
     <div class="row gap-5 justify-content-center">
         <!-- pagina di login spid -->
         <#include "container_spid.ftl" />
-        <!-- pagina di login cie -->
-        <#include "container_cie.ftl" />
     </div>
 </div>
