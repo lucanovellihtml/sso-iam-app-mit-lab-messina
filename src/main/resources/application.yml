@@ -97,16 +97,29 @@ sso:
     #idpListUrl: ${IDP_LIST_URL:https://idpspid-coll.pcspln.cloud/registry/idp_list.json}
     
     # aggiunto: modifica delle tre variabili con le url del lab di vantea di messina(list idp, url federazione spid aziende, url federazione spid cittadino)
-    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}    
-    spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
-    idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8081/registry/idp_list.json}
-    #
-    # aggiornamento: modificare successivamente la url del db esterno per recuperare la lista degli utenti
-    elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsi.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
-    aggiornaDataUltimaConnessioneUrl: ${AGGIORNA_DATA_ULTIMA_CONNESSIONE_URL:http://apigw-gwbackend-stage.k8s01.sidt.local/utenze/api/v1/utente/aggiornaDataUltimaConnessione}
-  cookieName: ${IDP_COOKIE_NAME:idpsso-coll}
+    #spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@}    
+    #spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
+    
+    # aggiunto: aggiunta url per collaudo messina
+    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.adspstretto.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/APSTR/spidsp&idpEntityID=@entity_id@}    
+    spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.adspstretto.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/APSTR/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
+    
+    # aggiunto: commentata url lab vantea 
+    #idpListUrl: ${IDP_LIST_URL:http://openam.strettomessina.it:8081/registry/idp_list.json}
+
+    # aggiunto: aggiunta url per collaudo messina
+    idpListUrl: ${IDP_LIST_URL:http://openam.adspstretto.it:8080/registry/idp_list.json}
+    #idpListUrl: ${IDP_LIST_URL:https://pcscoll.adspstretto.it/registry/idp_list.json}
+
+    # aggiornamento: ulr db esterno messina
+    #elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsi.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
+    elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsime.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
+    #aggiornaDataUltimaConnessioneUrl: ${AGGIORNA_DATA_ULTIMA_CONNESSIONE_URL:http://apigw-gwbackend-stage.k8s01.sidt.local/utenze/api/v1/utente/aggiornaDataUltimaConnessione}
+  
+  # aggiornamento: aggiornato cookie con quello di messina
+  cookieName: ${IDP_COOKIE_NAME:iPlanetDirectoryPro}
   jwtCookieName: am-auth-jwt
-  oldCookieName: idpsso-coll
+  oldCookieName: iPlanetDirectoryPro
   agentAuthnTxCookie: agent-authn-tx
   headerName: iv-user
   resetPasswordTargetUrl: https://servizicoll.comune.milano.it/plp?goto=https://portal-coll.ecaas.comune.milano.it/
@@ -121,11 +134,11 @@ sso:
   fakeresponse: false
   captcha_enabled: true
   # aggiornamento: url di default quando la goTo nell metodo redirectToLogout è null o vuota ---> da cambiare con quella di messina
-  logoutRedirectUrl: ${LOGOUT_REDIRECT_URL:https://ssospid-coll.pcspln.cloud/idp/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspmacscoll.pcspln.cloud%2Fweb%2Fportale-adsp%2F}
+  logoutRedirectUrl: ${LOGOUT_REDIRECT_URL:https://ssospid-coll.adspstretto.it/openam/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/APSTR/idptest&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fpcscoll.adspstretto.it%2Fweb%2Fportale-adsp%2F}
   # aggiornamento: url di default quando, nella postlogin, l'id utente è null ---> da cambiare con quella di messina
-  pdtRedirectUrl: ${PDT_REDIRECT_URL:https://adspmacscoll.pcspln.cloud/web/portale-adsp/}
+  pdtRedirectUrl: ${PDT_REDIRECT_URL:https://pcscoll.adspstretto.it/web/portale-adsp/}
   # aggiornamento: url di default quando non è presente utenza per accedere
-  undoLogoutRedirectUrl: ${UNDO_LOGOUT_REDIRECT_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/idpusers/spidsp&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspstretto.it}
+  undoLogoutRedirectUrl: ${UNDO_LOGOUT_REDIRECT_URL:http://ssospid-coll.adspstretto.it:8080/openam/saml2/jsp/idpSingleLogoutInit.jsp?metaAlias=/APSTR/spidsp&spEntityID=SP_APACS&binding=urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST&RelayState=https%3A%2F%2Fadspstretto.it}
   logoutMessageMobile: La sessione e' terminata. Chiudere l'applicazione per
     effettuare un nuovo accesso.
   postLogin:
