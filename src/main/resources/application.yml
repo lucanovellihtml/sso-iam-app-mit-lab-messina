@@ -101,7 +101,7 @@ sso:
     #spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.strettomessina.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/idpusers/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
     
     # aggiunto: aggiunta url per collaudo messina
-    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.adspstretto.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/APSTR/spidsp&idpEntityID=@entity_id@}    
+    spInitiatedBaseUrl: ${SP_INITIATED_BASE_URL:http://openam.adspstretto.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/APSTR/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=1}    
     spInitiatedBaseUrlAzienda: ${SP_INITIATED_BASE_URL:http://openam.adspstretto.it:8080/openam/saml2/jsp/spSSOInit.jsp?metaAlias=/APSTR/spidsp&idpEntityID=@entity_id@&AttributeConsumingServiceIndex=2}
     
     # aggiunto: commentata url lab vantea 
@@ -114,7 +114,7 @@ sso:
     # aggiornamento: ulr db esterno messina
     #elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsi.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
     elencoSediUtenteUrl: ${ELENCO_SEDI_UTENTE_URL:http://servizipcsime.pcspln.cloud:8080/pcsiRest/utente/findUtenti}
-    #aggiornaDataUltimaConnessioneUrl: ${AGGIORNA_DATA_ULTIMA_CONNESSIONE_URL:http://apigw-gwbackend-stage.k8s01.sidt.local/utenze/api/v1/utente/aggiornaDataUltimaConnessione}
+    aggiornaDataUltimaConnessioneUrl: ${AGGIORNA_DATA_ULTIMA_CONNESSIONE_URL:http://apigw-gwbackend-stage.k8s01.sidt.local/utenze/api/v1/utente/aggiornaDataUltimaConnessione}
   
   # aggiornamento: aggiornato cookie con quello di messina
   cookieName: ${IDP_COOKIE_NAME:iPlanetDirectoryPro}
