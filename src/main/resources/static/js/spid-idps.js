@@ -7,7 +7,7 @@
   // spid_populate function, if '.spid-button[data-spid-remote] ul' exist, try to get the remote json file and pupulate all spid buttons or use array static idpListUrl if fetch failure
   function spid_populate(spid_elements) {
     // queryURL
-    var queryURL = "http://openam.strettomessina.it:8081/registry/idp_list.json";
+    var queryURL = "http://openam.adspstretto.it:8080/registry/idp_list.json";
     //"https://registry.spid.gov.it/entities-idp?&output=json&custom=info_display_base";
     // list idp static
     var idpListUrl = [
@@ -23,7 +23,7 @@
       { "organization_name": "TI Trust Technologies srl", "entity_id": "https://login.id.tim.it/affwebservices/public/saml2sso", "logo_uri": "img/spid-idp-timid.svg" },
       { "organization_name": "Intesi Group S.p.A.", "entity_id": "https://idp.intesigroup.com", "logo_uri": "img/spid-idp-intesigroupspid.svg" },
       { "organization_name": "TeamSystem s.p.a.", "entity_id": "https://spid.teamsystem.com/idp", "logo_uri": "img/spid-idp-teamsystemid.svg" },
-      { "organization_name": "AgID", "entity_id": "https://validator.spid.gov.it/saml/idp", "logo_uri": "img/spid-idp-spid-validatorid.svg" }];
+      { "organization_name": "AgID", "entity_id": "https://validator.spid.gov.it", "logo_uri": "img/spid-idp-spid-validatorid.svg" }];
     if (spid_elements.length > 0) {
       fetch(queryURL)
         .then(function (response) {
