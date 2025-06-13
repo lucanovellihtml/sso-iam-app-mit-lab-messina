@@ -269,12 +269,12 @@ newsletter:
 ws:
   endpoint: ${ENDPOINT:http://sicurezza.ilportaledellautomobilista.it/eai/sicurezza-ws-pass/services/dettaglioUtenteMobile}
   endpointWSDL: ${ENDPOINT_WSDL:http://sicurezza.ilportaledellautomobilista.it/eai/sicurezza-ws-pass/services/dettaglioUtenteMobile/dettaglioUtenteMobile.wsdl}
-# Aggiornamento: aggiornate le url di AM con le url di AM messina lab vantea --> aggiornare piu' avanti con le url vere
+# Aggiornamento: aggiornate le url di AM con le url di AM collaudo messina
 forgerock:
-  baseUrl: ${FORGEROCK_BASE_URL:http://openam.strettomessina.it:8080/openam}
+  baseUrl: ${FORGEROCK_BASE_URL:http://openam.adspstretto.it:8080/openam}
   adminUsername: ${FORGEROCK_ADMIN_USERNAME:login-api-idp}
-  adminPassword: ${FORGEROCK_ADMIN_PASSWORD:Password01}
-  adminAuthenticate: ${FORGEROCK_ADMIN_AUTH_URL:http://openam.strettomessina.it:8080/openam/json/realms/idpusers/authenticate}
+  adminPassword: ${FORGEROCK_ADMIN_PASSWORD:8pqizMpKkXck8xzn}
+  adminAuthenticate: ${FORGEROCK_ADMIN_AUTH_URL:http://openam.adspstretto.it:8080/openam/json/realms/APSTR/authenticate}
 otp:
   enableOTPHeaderParamName: ${ENABLE_OTP_HEADER_PARAM_NAME:enableOTP}
   enableCheckApp: ${OTP_ENABLE_CHECK_APP:true}
